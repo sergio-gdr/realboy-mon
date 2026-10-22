@@ -167,11 +167,13 @@ static void handle_until(const struct cmd *cmd) {
 
 static void handle_delete(const struct cmd *cmd) {
 	uint16_t addr = 0;
-	char *str = cmd->argv[1];
-	if (str) {
-		if (str[0] == '0' && str[1] == 'x')
-			str += 2;
-		addr = str_to_addr(str);
+	if (cmd->argc > 1) {
+		char *str = cmd->argv[1];
+		if (str) {
+			if (str[0] == '0' && str[1] == 'x')
+				str += 2;
+			addr = str_to_addr(str);
+		}
 	}
 
 	client_unset_breakpoint(addr);
