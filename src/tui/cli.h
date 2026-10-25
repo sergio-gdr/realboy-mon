@@ -22,24 +22,6 @@
 #include <ncurses.h>
 #include <libemu.h>
 
-struct cli_window {
-	WINDOW *win;
-	size_t max_y, max_x;
-
-	size_t current_pos_y;
-	size_t current_pos_x;
-	uint32_t longest_str_size;
-
-	struct instr *instr_current_highlight;
-	list_t *instrs;
-};
-
-struct cmd {
-	int argc;
-	char **argv;
-	bool valid;
-};
-
 WINDOW *cli_init();
 void cli_redraw();
 void cli_window_handle_input(int ch);

@@ -19,8 +19,6 @@
 #ifndef TUI_H
 #define TUI_H
 
-#include "client.h"
-
 struct dispatch_table *tui_init();
 int tui_run();
 

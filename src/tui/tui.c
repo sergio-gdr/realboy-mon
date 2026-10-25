@@ -26,8 +26,8 @@
 
 #include "cli.h"
 #include "client.h"
-
 #include "disasm.h"
+#include "list.h"
 
 struct wsrc_instr {
 	struct instruction *instr;

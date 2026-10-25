@@ -19,7 +19,24 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <stdint.h>
+
 #include <libemu.h>
+
+enum cpu_reg {
+	CPU_REG_AF,
+	CPU_REG_BC,
+	CPU_REG_DE,
+	CPU_REG_HL,
+	CPU_REG_SP,
+	CPU_REG_PC
+};
+
+enum ppu_reg {
+	PPU_REG_LCDC = 0xff40,
+	PPU_REG_STAT = 0xff41,
+	PPU_REG_LY = 0xff44
+};
 
 struct instruction {
 	uint16_t addr;

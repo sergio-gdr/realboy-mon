@@ -23,11 +23,28 @@
 #include "cli.h"
 
 #include "client.h"
-
-struct cli_window wcli;
+#include "list.h"
 
 #define CLI_MAX_INPUT_SIZE 256
 
+struct cli_window {
+	WINDOW *win;
+	size_t max_y, max_x;
+
+	size_t current_pos_y;
+	size_t current_pos_x;
+	uint32_t longest_str_size;
+
+	struct instr *instr_current_highlight;
+	list_t *instrs;
+};
+struct cli_window wcli;
+
+struct cmd {
+	int argc;
+	char **argv;
+	bool valid;
+};
 list_t *cmd_list;
 
 static int str_command_get_argc_argv(const char *str, char ***argv) {
