@@ -163,7 +163,7 @@ static void sigint_handler(int _) {
 
 static bool is_current_instr_in_instrs() {
 	uintptr_t uiptr_instr;
-	list_for_each(tui.src_window.instrs, uiptr_instr) {
+	list_for_each(tui.src_window.instrs, uiptr_instr, dummy) {
 		struct wsrc_instr *in = (struct wsrc_instr *)uiptr_instr;
 		if (in->instr->addr == tui.src_window.current_instr.instr->addr) {
 			return true;
@@ -225,7 +225,7 @@ static list_t *get_instrs(uint16_t start_addr) {
 err2:
 	{
 	uintptr_t instr;
-	list_for_each(instr_list, instr) {
+	list_for_each(instr_list, instr, dummy) {
 		free(((struct wsrc_instr *)instr)->instr);
 	}
 	list_free(instr_list);
@@ -246,6 +246,17 @@ static struct instruction *get_current_instr() {
 static void wsrc_redraw(uint32_t addr) {
 	struct source_window *wsrc = &tui.src_window;
 
+	uintptr_t uiptr_instr;
+	int i = 0;
+	if (wsrc->instrs) {
+		list_for_each(wsrc->instrs, uiptr_instr, dummy) {
+			static struct wsrc_instr *curr;
+			if (curr)
+				free(curr);
+			curr = (struct wsrc_instr *)uiptr_instr;
+		}
+	}
+
 	free(wsrc->instrs);
 	wsrc->instrs = get_instrs(addr); // we own this list
 
@@ -259,9 +270,8 @@ static void wsrc_redraw(uint32_t addr) {
 	wsrc->longest_str_size = 0;
 
 	// fill the source window with instructions
-	uintptr_t uiptr_instr;
-	int i = 0;
-	list_for_each(wsrc->instrs, uiptr_instr) {
+	i = 0;
+	list_for_each(wsrc->instrs, uiptr_instr, dummy2) {
 		struct wsrc_instr *in = (struct wsrc_instr *)uiptr_instr;
 		mvwaddstr(wsrc->win, i+1, wsrc->max_x/2, reg_to_str(in->instr->addr));
 		mvwaddstr(wsrc->win, i+1, (wsrc->max_x/2)+7, in->instr->str);
@@ -274,7 +284,7 @@ static void wsrc_highlight_instr(uint32_t addr) {
 	struct source_window *wsrc = &tui.src_window;
 	uintptr_t uiptr_instr;
 	int i = 0;
-	list_for_each(wsrc->instrs, uiptr_instr) {
+	list_for_each(wsrc->instrs, uiptr_instr, dummy) {
 		struct wsrc_instr *in = (struct wsrc_instr *)uiptr_instr;
 		if (in->is_highlighted) {
 			wattroff(wsrc->win, A_REVERSE);
@@ -386,7 +396,7 @@ static void wsrc_set_curr_instr(uint32_t addr) {
 
 	uintptr_t uiptr_instr;
 	int i = 0;
-	list_for_each(tui.src_window.instrs, uiptr_instr) {
+	list_for_each(tui.src_window.instrs, uiptr_instr, dummy) {
 		struct wsrc_instr *in = (struct wsrc_instr *)uiptr_instr;
 		if (in->is_current) {
 			in->is_current = false;

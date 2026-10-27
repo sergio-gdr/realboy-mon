@@ -12,9 +12,9 @@ typedef struct {
 	uintptr_t *items;
 } list_t;
 
-#define list_for_each(list, var) \
-	int dummydummy = 0; \
-	for (var = list->items[0]; dummydummy < list->length; dummydummy++, var = list->items[dummydummy]) \
+#define list_for_each(list, var, dummy) \
+	int dummy = 0; \
+	for (var = list->items[0]; dummy < list->length; dummy++, var = list->items[dummy]) \
 
 static inline list_t *create_list(void) {
 	list_t *list = malloc(sizeof(list_t));
@@ -55,7 +55,7 @@ static inline void list_del(list_t *list, int index) {
 static inline void list_remove(list_t *list, uintptr_t item) {
 	uintptr_t match;
 	int j = 0;
-	list_for_each(list, match) {
+	list_for_each(list, match, dummy) {
 		j++;
 		if (match == item)
 			break;
